@@ -63,3 +63,72 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
+
+
+
+const galleryBody = [...galleryItems].map(function(galleryItem) {
+  // create img
+  const img = document.createElement("img");
+  img.setAttribute('src', galleryItem.preview);
+  img.setAttribute('data-source', galleryItem.original);
+  img.setAttribute('alt', galleryItem.description);
+  img.classList.add("gallery__image");
+  // create a
+  const a = document.createElement("a");
+  a.setAttribute("href", galleryItem.original)
+  a.classList.add("gallery__link");
+  // create li
+  const li = document.createElement("li");
+  li.classList.add("gallery__item");
+  // create gallery item html structure
+  li.appendChild(a.appendChild(img));
+  return li.outerHTML;
+}).join("");
+
+const galleryContainer = document.querySelector('.gallery.js-gallery');
+galleryContainer.insertAdjacentHTML('beforeend', galleryBody);
+
+let modalContainer = document.querySelector(".lightbox");
+let modalImage = document.querySelector(".lightbox__image");
+
+    
+galleryContainer.addEventListener('click', function(event){
+  let galleryItem = event.target;
+  if (galleryItem.matches(".gallery__image")) {
+    modalImage.setAttribute('src', galleryItem.dataset.source);
+    modalImage.setAttribute('alt', galleryItem.dataset.desciption);
+    modalContainer.classList.add('is-open');
+  }
+});
+
+// Close modal
+const modalCloseButton = document.querySelector('.lightbox__button');
+modalCloseButton.addEventListener('click', function (event) {
+  modalContainer.classList.remove('is-open');
+  modalImage.setAttribute('src', '');
+});
+
+const modalOverlay = document.querySelector('.lightbox__overlay');
+modalOverlay.addEventListener('click', function (event) {
+  modalContainer.classList.remove('is-open');
+  modalImage.setAttribute('src', '');
+});
+
+// Esc
+document.addEventListener('keydown', function (event) {
+  switch (event.key) {
+    case "ArrowRight":
+      console.log("ArrowRight");
+      break;
+    case "ArrowLeft":
+      console.log("ArrowLeft");
+      break;
+    case "Escape": 
+      modalContainer.classList.remove('is-open');
+      modalImage.setAttribute('src', '');
+      break;
+  }
+});
+
+
+
